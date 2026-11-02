@@ -17,7 +17,7 @@
     html{scroll-behavior:smooth;scroll-padding-top:90px}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}
     h1,h2,h3,.display{font-family:Manrope,sans-serif;letter-spacing:-.045em}
-    .container{width:min(1480px,calc(100% - 80px));margin-inline:auto}
+    .site-container{width:min(1480px,calc(100% - 80px));margin-inline:auto}
     .eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
     .muted{color:var(--muted)}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:14px 20px;border:1px solid var(--ink);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:.2s}
@@ -53,12 +53,12 @@
     .hero-section{padding-top:124px!important;padding-bottom:84px!important}
     .hero-title{font-size:clamp(3.5rem,6.2vw,7rem)!important;line-height:.98!important}
     @media(max-width:1100px){
-      .container{width:calc(100% - 56px)}
+      .site-container{width:calc(100% - 56px)}
       .hero-section{padding-top:116px!important;padding-bottom:72px!important}
       .hero-title{font-size:clamp(3.25rem,6.5vw,5.4rem)!important}
     }
     @media(max-width:767px){
-      .container{width:calc(100% - 36px)}
+      .site-container{width:calc(100% - 36px)}
       .hero-section{padding-top:104px!important;padding-bottom:58px!important}
       .hero-title{font-size:clamp(2.65rem,11vw,4.25rem)!important;line-height:1.02!important;margin-bottom:1.35rem!important}
       .hero-section .grid{gap:2rem}
@@ -67,16 +67,39 @@
       .btn{min-height:48px}
     }
     @media(max-width:380px){
-      .container{width:calc(100% - 28px)}
+      .site-container{width:calc(100% - 28px)}
       .hero-title{font-size:2.5rem!important}
     }
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}*{transition-duration:.01ms!important}}
-    @media(max-width:640px){.container{width:min(100% - 36px,1160px)}.hero-title{font-size:clamp(2.65rem,13vw,4.5rem)!important}.project-visual{min-height:190px}.btn{width:100%}}
+    @media(max-width:640px){.site-container{width:min(100% - 36px,1160px)}.hero-title{font-size:clamp(2.65rem,13vw,4.5rem)!important}.project-visual{min-height:190px}.btn{width:100%}}
+
+    /* Contenedor propio: evita el conflicto con la utilidad .container de Tailwind */
+    .site-container{width: min(1480px, calc(100% - 96px)); margin-left:auto; margin-right:auto}
+    @media(max-width:1100px){.site-container{width:calc(100% - 64px)}}
+    @media(max-width:767px){
+      .site-container{width:calc(100% - 40px)}
+      header .site-container{height:68px;gap:12px}
+      header a[aria-label="Ros Solutions, inicio"]{gap:9px;flex-shrink:0;white-space:nowrap}
+      header a[aria-label="Ros Solutions, inicio"] > span:last-child{font-size:15px;letter-spacing:-.04em;white-space:nowrap}
+      header a[aria-label="Ros Solutions, inicio"] > span:first-child{width:34px;height:34px}
+      header .header-cta{width:auto!important;min-height:42px;padding:10px 13px!important;font-size:.64rem!important;white-space:nowrap;flex-shrink:0}
+      .hero-section{padding-top:100px!important;padding-bottom:48px!important}
+      .hero-section .site-container{gap:30px}
+      .hero-section .eyebrow{margin-bottom:20px}
+      .hero-title{font-size:clamp(2.55rem,10.5vw,3.8rem)!important;overflow-wrap:normal}
+      section{scroll-margin-top:76px}
+    }
+    @media(max-width:380px){
+      .site-container{width:calc(100% - 32px)}
+      header a[aria-label="Ros Solutions, inicio"] > span:last-child{font-size:14px}
+      header .header-cta{padding:9px 10px!important;font-size:.59rem!important}
+    }
+
   </style>
 </head>
 <body>
 <header class="fixed top-0 inset-x-0 z-50 bg-[#f7f7f5]/95 backdrop-blur border-b border-black/10">
-  <div class="container h-[76px] flex items-center justify-between gap-5">
+  <div class="site-container h-[76px] flex items-center justify-between gap-5">
     <a href="#inicio" class="flex items-center gap-3" aria-label="Ros Solutions, inicio">
       <span class="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-lg">R.</span>
       <span class="font-extrabold display text-lg tracking-tight">ROS <span class="font-normal">SOLUTIONS</span></span>
@@ -84,13 +107,13 @@
     <nav class="hidden md:flex items-center gap-8" aria-label="Navegación principal">
       <a class="navlink" href="#servicios">Servicios</a><a class="navlink" href="#proceso">Proceso</a><a class="navlink" href="#proyectos">Proyectos</a><a class="navlink" href="#faq">FAQ</a>
     </nav>
-    <a class="btn btn-dark !py-3 !px-4 !text-[.68rem]" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
+    <a class="btn btn-dark header-cta !py-3 !px-4 !text-[.68rem]" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
   </div>
 </header>
 
 <main id="inicio">
   <section class="pt-36 pb-24 md:pt-44 md:pb-32 grid-bg hero-section">
-    <div class="container grid lg:grid-cols-[1.15fr_.85fr] gap-14 items-center">
+    <div class="site-container grid lg:grid-cols-[1.15fr_.85fr] gap-14 items-center">
       <div class="reveal">
         <div class="eyebrow flex items-center gap-3 mb-7"><span class="w-2 h-2 bg-black inline-block"></span> Desarrollo web · Automatización</div>
         <h1 class="hero-title display font-extrabold text-[clamp(3.4rem,7vw,6.6rem)] leading-[.98] mb-8">Tu negocio<br>merece <span class="text-transparent" style="-webkit-text-stroke:1.5px #111">trabajar</span><br>mejor.</h1>
@@ -129,7 +152,7 @@
   </section>
 
   <section class="py-20 bg-[#111] text-white">
-    <div class="container grid md:grid-cols-2 gap-12 items-start">
+    <div class="site-container grid md:grid-cols-2 gap-12 items-start">
       <div class="reveal">
         <p class="eyebrow text-white/50 mb-5">El reto de muchos negocios</p>
         <h2 class="display text-4xl md:text-5xl font-extrabold leading-tight">La tecnología debería quitarte trabajo, no añadirlo.</h2>
@@ -147,7 +170,7 @@
   </section>
 
   <section id="servicios" class="py-24 md:py-32">
-    <div class="container">
+    <div class="site-container">
       <div class="reveal max-w-2xl mb-14"><p class="eyebrow muted mb-5">Qué podemos hacer</p><h2 class="display text-4xl md:text-6xl font-extrabold mb-5">Dos especialidades.<br>Un objetivo común.</h2><p class="muted text-lg">Elegimos las herramientas según el problema: desde una web sencilla hasta procesos conectados con tus aplicaciones.</p></div>
       <div class="grid md:grid-cols-2 gap-5">
         <article class="service-card card p-7 md:p-10 reveal">
@@ -173,7 +196,7 @@
   </section>
 
   <section id="proceso" class="py-24 bg-[#ecece8]">
-    <div class="container">
+    <div class="site-container">
       <div class="reveal mb-14"><p class="eyebrow muted mb-5">Cómo trabajamos</p><h2 class="display text-4xl md:text-6xl font-extrabold">Claro desde el primer día.</h2></div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 border border-[#d4d4ce]">
         <div class="p-7 border-b sm:border-r lg:border-b-0 border-[#d4d4ce] reveal"><p class="number">01</p><h3 class="font-extrabold text-xl mb-3">Te escuchamos</h3><p class="muted text-sm leading-relaxed">Entendemos tu negocio, el problema y qué resultado necesitas.</p></div>
@@ -185,7 +208,7 @@
   </section>
 
   <section id="proyectos" class="py-24 md:py-32">
-    <div class="container">
+    <div class="site-container">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 reveal">
         <div><p class="eyebrow muted mb-5">Proyectos demostrativos</p><h2 class="display text-4xl md:text-6xl font-extrabold">Ideas convertidas<br>en experiencias web.</h2></div>
         <p class="muted max-w-sm text-sm leading-relaxed">Ejemplos conceptuales creados para mostrar posibilidades de diseño y desarrollo. No son encargos ni resultados de clientes reales.</p>
@@ -221,14 +244,14 @@
   </section>
 
   <section class="py-24 bg-[#d8ff65]">
-    <div class="container flex flex-col md:flex-row items-start md:items-center justify-between gap-8 reveal">
+    <div class="site-container flex flex-col md:flex-row items-start md:items-center justify-between gap-8 reveal">
       <div><p class="eyebrow mb-4">No hace falta complicarlo</p><h2 class="display text-4xl md:text-5xl font-extrabold max-w-2xl">Empecemos por el proceso que más tiempo te quita.</h2></div>
       <a class="btn btn-dark shrink-0" href="#contacto">Cuéntanoslo <span>→</span></a>
     </div>
   </section>
 
   <section id="faq" class="py-24">
-    <div class="container grid lg:grid-cols-[.8fr_1.2fr] gap-14">
+    <div class="site-container grid lg:grid-cols-[.8fr_1.2fr] gap-14">
       <div class="reveal"><p class="eyebrow muted mb-5">Preguntas frecuentes</p><h2 class="display text-4xl md:text-5xl font-extrabold mb-5">Antes de empezar.</h2><p class="muted leading-relaxed">Si tienes otra pregunta, cuéntanosla en el formulario y la revisamos contigo.</p></div>
       <div class="reveal">
         <details class="faq-item"><summary>¿Trabajáis con cualquier tipo de negocio?</summary><p class="muted text-sm leading-relaxed pb-6">Trabajamos con pequeños negocios y profesionales de distintos sectores. Primero analizamos la necesidad para comprobar si podemos aportar una solución adecuada.</p></details>
@@ -241,7 +264,7 @@
   </section>
 
   <section id="contacto" class="py-24 md:py-32 bg-[#111] text-white">
-    <div class="container grid lg:grid-cols-2 gap-14 items-start">
+    <div class="site-container grid lg:grid-cols-2 gap-14 items-start">
       <div class="reveal">
         <p class="eyebrow text-white/50 mb-5">Hablemos de tu proyecto</p>
         <h2 class="display text-4xl md:text-6xl font-extrabold leading-tight mb-7">Cuéntanos qué necesitas. <span class="text-white/40">Buscaremos la forma de hacerlo sencillo.</span></h2>
@@ -270,7 +293,7 @@
 </main>
 
 <footer class="bg-[#111] text-white border-t border-white/10 py-9">
-  <div class="container flex flex-col md:flex-row justify-between gap-7 items-start md:items-center">
+  <div class="site-container flex flex-col md:flex-row justify-between gap-7 items-start md:items-center">
     <div><p class="display font-extrabold text-xl">ROS <span class="font-normal">SOLUTIONS</span></p><p class="text-white/45 text-xs mt-2">Desarrollo web · Automatización de procesos</p></div>
     <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/60"><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#contacto">Contacto</a><a href="mailto:rossolutionsesp@gmail.com">Email</a></nav>
     <p class="text-white/35 text-xs">© <span id="year"></span> Ros Solutions.</p>
