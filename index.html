@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f7f5">
   <meta name="description" content="Ros Solutions ayuda a pequeños negocios a digitalizarse con páginas web profesionales y automatizaciones a medida.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ros Solutions — Desarrollo web y automatización">
+  <meta property="og:description" content="Páginas web profesionales y automatizaciones prácticas para pequeños negocios.">
+  <meta property="og:url" content="https://rossolutionsesp.github.io/rossolutions/">
+  <link rel="canonical" href="https://rossolutionsesp.github.io/rossolutions/">
   <title>Ros Solutions — Desarrollo web y automatización</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%230a0a0a'/%3E%3Cpath d='M20 8v24M8 20h24' stroke='white' stroke-width='2'/%3E%3Ccircle cx='20' cy='20' r='4' fill='white'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -95,20 +100,62 @@
       header .header-cta{padding:9px 10px!important;font-size:.59rem!important}
     }
 
+
+    /* Navegación móvil */
+    .mobile-menu{display:none}
+    .mobile-menu[data-open="true"]{display:block}
+    .mobile-menu a{display:block;padding:13px 2px;border-top:1px solid rgba(0,0,0,.09);font-size:.92rem;font-weight:600;color:#333}
+    .mobile-menu a:hover{color:#000}
+    .menu-toggle{display:none;width:44px;height:44px;align-items:center;justify-content:center;border:1px solid var(--line);background:transparent;color:var(--ink);flex:0 0 auto}
+    .menu-toggle:focus-visible,.mobile-menu a:focus-visible,.navlink:focus-visible,.btn:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #8da82c;outline-offset:3px}
+    @media(max-width:767px){
+      .desktop-nav{display:none!important}
+      .menu-toggle{display:inline-flex}
+      .mobile-menu{padding:0 20px 14px;background:rgba(247,247,245,.98);border-top:1px solid rgba(0,0,0,.08)}
+      header .header-inner{height:68px;gap:10px}
+      header .header-cta{margin-left:auto}
+    }
+    @media(min-width:768px){.mobile-menu{display:none!important}}
+    /* Las animaciones solo se activan cuando JavaScript puede gestionarlas. */
+    .reveal{opacity:1;transform:none}
+    .js .reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+    .js .reveal.visible{opacity:1;transform:none}
+    @media(prefers-reduced-motion:reduce){
+      .js .reveal{opacity:1;transform:none;transition:none}
+      .service-card{transition:none}
+      .service-card:hover{transform:none}
+    }
+    @media(max-width:767px){.mobile-menu a{min-height:44px}}
+    @media(max-width:380px){header .header-cta{display:none!important}}
+
+
+    .mobile-menu[hidden]{display:none!important}
   </style>
 </head>
 <body>
 <header class="fixed top-0 inset-x-0 z-50 bg-[#f7f7f5]/95 backdrop-blur border-b border-black/10">
-  <div class="site-container h-[76px] flex items-center justify-between gap-5">
+  <div class="site-container h-[76px] flex items-center justify-between gap-5 header-inner">
     <a href="#inicio" class="flex items-center gap-3" aria-label="Ros Solutions, inicio">
       <span class="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-lg">R.</span>
       <span class="font-extrabold display text-lg tracking-tight">ROS <span class="font-normal">SOLUTIONS</span></span>
     </a>
-    <nav class="hidden md:flex items-center gap-8" aria-label="Navegación principal">
+    <nav class="desktop-nav hidden md:flex items-center gap-8" aria-label="Navegación principal">
       <a class="navlink" href="#servicios">Servicios</a><a class="navlink" href="#proceso">Proceso</a><a class="navlink" href="#proyectos">Proyectos</a><a class="navlink" href="#faq">FAQ</a>
     </nav>
     <a class="btn btn-dark header-cta !py-3 !px-4 !text-[.68rem]" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+      <svg id="menu-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+    </button>
   </div>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Navegación móvil" data-open="false" hidden>
+    <a href="#servicios">Servicios</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#faq">Preguntas frecuentes</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
 </header>
 
 <main id="inicio">
@@ -282,10 +329,10 @@
           <div><label for="business">Nombre del negocio (opcional)</label><input id="business" name="negocio" autocomplete="organization" placeholder="Nombre de tu negocio"></div>
           <div><label for="service">¿En qué podemos ayudarte?</label><select id="service" name="servicio" required><option value="">Selecciona una opción</option><option>Desarrollo web</option><option>Automatización con n8n</option><option>Web + automatización</option><option>Integración o mejora de un sistema</option><option>No lo tengo claro todavía</option></select></div>
           <div><label for="message">Cuéntanos un poco más</label><textarea id="message" name="mensaje" rows="4" placeholder="¿Qué necesitas mejorar o qué tarea te gustaría automatizar?" required></textarea></div>
-          <label class="flex items-start gap-3 normal-case tracking-normal font-normal text-xs leading-relaxed"><input type="checkbox" name="consentimiento" required class="!w-4 !h-4 mt-0.5 shrink-0"><span>He leído la información básica sobre el tratamiento de mis datos y acepto que se utilicen para responder a esta solicitud. <span class="text-gray-500">(Responsable: Ros Solutions. Finalidad: gestionar y responder la consulta. Puedes ejercer tus derechos escribiendo al correo de contacto.)</span></span></label>
+          <label class="flex items-start gap-3 normal-case tracking-normal font-normal text-xs leading-relaxed"><input type="checkbox" name="consentimiento" required class="!w-4 !h-4 mt-0.5 shrink-0"><span>He leído la <a href="politica-privacidad.html" target="_blank" rel="noopener noreferrer" class="underline font-semibold">Política de privacidad</a> y acepto el tratamiento de mis datos para gestionar y responder a esta solicitud.</span></label>
           <button id="contact-submit" class="btn btn-dark w-full" type="submit">Enviar solicitud <span>→</span></button>
           <p id="contact-status" class="text-sm text-gray-600" role="status" aria-live="polite"></p>
-          <p class="text-[.68rem] text-gray-500 leading-relaxed">No utilizaremos este formulario para enviarte publicidad no solicitada. Para una política de privacidad completa, sustituye esta información básica por el texto legal adaptado a la identidad y actividad del responsable antes de publicar.</p>
+          <p class="text-[.68rem] text-gray-500 leading-relaxed">Tus datos se utilizarán únicamente para atender esta consulta. Consulta la <a href="politica-privacidad.html" target="_blank" rel="noopener noreferrer" class="underline font-semibold">Política de privacidad</a> para conocer los detalles.</p>
         </form>
       </div>
     </div>
@@ -295,7 +342,7 @@
 <footer class="bg-[#111] text-white border-t border-white/10 py-9">
   <div class="site-container flex flex-col md:flex-row justify-between gap-7 items-start md:items-center">
     <div><p class="display font-extrabold text-xl">ROS <span class="font-normal">SOLUTIONS</span></p><p class="text-white/45 text-xs mt-2">Desarrollo web · Automatización de procesos</p></div>
-    <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/60"><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#contacto">Contacto</a><a href="mailto:rossolutionsesp@gmail.com">Email</a></nav>
+    <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/60"><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#contacto">Contacto</a><a href="mailto:rossolutionsesp@gmail.com">Email</a><a href="politica-privacidad.html">Privacidad</a></nav>
     <p class="text-white/35 text-xs">© <span id="year"></span> Ros Solutions.</p>
   </div>
 </footer>
@@ -303,16 +350,59 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+  // Menú móvil: accesible por teclado, cierra al navegar y al pulsar Escape.
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  function closeMobileMenu(returnFocus = false) {
+    if (!menuToggle || !mobileMenu) return;
+    mobileMenu.hidden = true;
+    mobileMenu.dataset.open = 'false';
+    menuToggle.setAttribute('aria-expanded', 'false');
+    menuToggle.setAttribute('aria-label', 'Abrir menú');
+    if (returnFocus) menuToggle.focus();
+  }
+
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      const willOpen = menuToggle.getAttribute('aria-expanded') !== 'true';
+      mobileMenu.hidden = !willOpen;
+      mobileMenu.dataset.open = String(willOpen);
+      menuToggle.setAttribute('aria-expanded', String(willOpen));
+      menuToggle.setAttribute('aria-label', willOpen ? 'Cerrar menú' : 'Abrir menú');
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => closeMobileMenu());
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
+        closeMobileMenu(true);
       }
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) closeMobileMenu();
+    });
+  }
+
+  // Animaciones progresivas: si no hay soporte, el contenido permanece visible.
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('js');
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -35px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
+  }
+
+  // FormSubmit: se conserva el envío AJAX que ya utilizabas.
   const form = document.getElementById('contact-form');
   const submit = document.getElementById('contact-submit');
   const status = document.getElementById('contact-status');
@@ -320,20 +410,28 @@
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!form.reportValidity()) return;
+
     submit.disabled = true;
     submit.style.opacity = '.6';
     status.textContent = 'Enviando tu solicitud…';
+
     try {
       const response = await fetch(form.action, {
         method: 'POST',
         body: new FormData(form),
         headers: { 'Accept': 'application/json' }
       });
+
       if (!response.ok) throw new Error('No se pudo enviar el formulario.');
+      const result = await response.json();
+      if (result.success === 'false' || result.success === false) {
+        throw new Error(result.message || 'FormSubmit no ha confirmado el envío.');
+      }
+
       status.textContent = '¡Gracias! Tu solicitud se ha enviado correctamente.';
       form.reset();
     } catch (error) {
-      status.textContent = 'No se ha podido enviar. Puedes escribirnos a rossolutionsesp@gmail.com.';
+      status.textContent = 'No se ha podido confirmar el envío. Puedes escribirnos a rossolutionsesp@gmail.com.';
     } finally {
       submit.disabled = false;
       submit.style.opacity = '1';
