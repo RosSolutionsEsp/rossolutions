@@ -1,786 +1,298 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ros Solutions — Automatización con IA & Desarrollo Web</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23FAFAFA'/%3E%3Ccircle cx='20' cy='20' r='3.4' fill='%230A0A0A'/%3E%3Cline x1='20' y1='20' x2='20' y2='5' stroke='%230A0A0A' stroke-width='1.6'/%3E%3Cline x1='20' y1='20' x2='32' y2='27' stroke='%230A0A0A' stroke-width='1.6'/%3E%3Cline x1='20' y1='20' x2='8' y2='27' stroke='%230A0A0A' stroke-width='1.6'/%3E%3Ccircle cx='20' cy='5' r='3.6' fill='%230A0A0A'/%3E%3Ccircle cx='32' cy='27' r='3' fill='%230A0A0A'/%3E%3Ccircle cx='8' cy='27' r='3' fill='%230A0A0A'/%3E%3Crect x='27' y='8' width='3.4' height='3.4' fill='%230A0A0A' opacity='.55'/%3E%3Crect x='33' y='13' width='2.2' height='2.2' fill='%230A0A0A' opacity='.3'/%3E%3C/svg%3E"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f5">
+  <meta name="description" content="Ros Solutions ayuda a pequeños negocios a digitalizarse con páginas web profesionales y automatizaciones a medida.">
+  <title>Ros Solutions — Desarrollo web y automatización</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%230a0a0a'/%3E%3Cpath d='M20 8v24M8 20h24' stroke='white' stroke-width='2'/%3E%3Ccircle cx='20' cy='20' r='4' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'ink':      '#0A0A0A',
-            'ink2':     '#141414',
-            'ink3':     '#1E1E1E',
-            'mid':      '#3A3A3A',
-            'smoke':    '#6B6B6B',
-            'silver':   '#A8A8A8',
-            'mist':     '#D4D4D4',
-            'pearl':    '#F0F0F0',
-            'snow':     '#FAFAFA',
-            'accent':   '#1A1A2E',
-            'accent2':  '#252542',
-          },
-          fontFamily: {
-            display: ['Syne', 'sans-serif'],
-            body:    ['Inter', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { background: #FAFAFA; color: #0A0A0A; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-    ::selection { background: #0A0A0A; color: #FAFAFA; }
-
-    .pixel-grid {
-      background-image:
-        linear-gradient(rgba(10,10,10,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(10,10,10,.04) 1px, transparent 1px);
-      background-size: 32px 32px;
-    }
-    .pixel-grid-dark {
-      background-image:
-        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-      background-size: 32px 32px;
-    }
-
-    .pixel-scatter {
-      position: absolute;
-      top: 0; right: 0;
-      width: 320px;
-      height: 320px;
-      pointer-events: none;
-    }
-    .pixel-scatter::before,
-    .pixel-scatter::after {
-      content: '';
-      position: absolute;
-    }
-
-    .nav-item {
-      font-family: 'Syne', sans-serif;
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: #6B6B6B;
-      position: relative;
-      transition: color .3s;
-    }
-    .nav-item::after {
-      content: '';
-      position: absolute;
-      bottom: -2px; left: 0;
-      width: 0; height: 1px;
-      background: #0A0A0A;
-      transition: width .35s cubic-bezier(.16,1,.3,1);
-    }
-    .nav-item:hover { color: #0A0A0A; }
-    .nav-item:hover::after { width: 100%; }
-
-    .hero-line {
-      display: block;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      line-height: .92;
-      letter-spacing: -.03em;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity .9s ease, transform 1s cubic-bezier(.16,1,.3,1);
-      overflow-wrap: break-word;
-      word-break: break-word;
-      hyphens: auto;
-    }
-    .hero-line.visible { opacity: 1; transform: translateY(0); }
-    .hero-line:nth-child(2) { transition-delay: .12s; }
-    .hero-line:nth-child(3) { transition-delay: .24s; }
-    .hero-line:nth-child(4) { transition-delay: .36s; }
-
-    .btn-solid {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: #0A0A0A;
-      color: #FAFAFA;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: .75rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: .9rem 2rem;
-      border: 1.5px solid #0A0A0A;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: color .4s;
-    }
-    .btn-solid::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: #FAFAFA;
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform .4s cubic-bezier(.16,1,.3,1);
-      z-index: 0;
-    }
-    .btn-solid:hover { color: #0A0A0A; }
-    .btn-solid:hover::before { transform: scaleX(1); transform-origin: left; }
-    .btn-solid span { position: relative; z-index: 1; }
-
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: transparent;
-      color: #0A0A0A;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: .75rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: .9rem 2rem;
-      border: 1.5px solid #0A0A0A;
-      cursor: pointer;
-      transition: background .3s, color .3s;
-    }
-    .btn-outline:hover { background: #0A0A0A; color: #FAFAFA; }
-
-    .service-card {
-      border: 1.5px solid #D4D4D4;
-      background: #FAFAFA;
-      padding: 3rem;
-      position: relative;
-      transition: border-color .3s, box-shadow .4s, transform .4s cubic-bezier(.16,1,.3,1);
-      overflow: hidden;
-    }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 100%; height: 3px;
-      background: #0A0A0A;
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .5s cubic-bezier(.16,1,.3,1);
-    }
-    .service-card:hover {
-      border-color: #3A3A3A;
-      box-shadow: 0 20px 60px rgba(0,0,0,.12);
-      transform: translateY(-4px);
-    }
-    .service-card:hover::before { transform: scaleX(1); }
-
-    .port-card {
-      background: #F97316;
-      border: 1.5px solid #C2410C;
-      transition: background .3s, box-shadow .4s, transform .4s cubic-bezier(.16,1,.3,1), border-color .3s;
-      overflow: hidden;
-    }
-    .port-card:hover {
-      background: #FB923C;
-      box-shadow: 0 32px 80px rgba(194,65,12,.28);
-      transform: translateY(-6px);
-      border-color: #9A3412;
-    }
-    .port-card .text-smoke { color: #431407; }
-    .port-card .port-tag { background: rgba(255,255,255,.28); }
-    .port-tag {
-      font-family: 'Syne', sans-serif;
-      font-size: .65rem;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      padding: .25rem .65rem;
-      border: 1px solid currentColor;
-    }
-
-    .pixel-block {
-      display: inline-block;
-      background: #0A0A0A;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(36px);
-      transition: opacity .8s ease, transform .9s cubic-bezier(.16,1,.3,1);
-    }
-    .reveal.in { opacity: 1; transform: translateY(0); }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: .018;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    @media (max-width: 639px) {
-      header {
-        padding: .85rem 1.25rem !important;
-        gap: .75rem;
-      }
-      header img {
-        width: 2rem;
-        height: 2rem;
-        object-fit: contain;
-      }
-      header .btn-solid {
-        width: auto;
-        flex-shrink: 0;
-        padding: .7rem .85rem;
-        font-size: .62rem;
-        letter-spacing: .08em;
-      }
-      section,
-      footer {
-        padding-left: 1.25rem !important;
-        padding-right: 1.25rem !important;
-      }
-      section:not(:first-of-type) {
-        padding-top: 5rem !important;
-        padding-bottom: 5rem !important;
-      }
-      .hero-line {
-        font-size: clamp(2.3rem, 12vw, 3rem) !important;
-        line-height: .96;
-        overflow-wrap: anywhere;
-      }
-      .btn-solid,
-      .btn-outline {
-        justify-content: center;
-        width: 100%;
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-      .service-card {
-        padding: 1.5rem;
-      }
-      .port-card .p-7 {
-        padding: 1.5rem;
-      }
-      .port-card .flex.items-center.justify-between {
-        align-items: flex-start;
-        gap: .75rem;
-      }
-      .port-tag {
-        letter-spacing: .1em;
-      }
-      #contacto > div {
-        gap: 3rem;
-      }
-      #contacto form {
-        min-width: 0;
-      }
-      #contacto .reveal > div[style*="padding:2.5rem"] {
-        padding: 1.25rem !important;
-      }
-      input,
-      select,
-      textarea {
-        min-width: 0;
-        max-width: 100%;
-      }
-      footer nav {
-        gap: 1rem 1.5rem;
-      }
-    }
+    :root{--ink:#111;--muted:#686868;--paper:#f7f7f5;--line:#deded9;--lime:#d8ff65}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:90px}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}
+    h1,h2,h3,.display{font-family:Manrope,sans-serif;letter-spacing:-.045em}
+    .container{width:min(1160px,calc(100% - 48px));margin-inline:auto}
+    .eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+    .muted{color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:14px 20px;border:1px solid var(--ink);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:.2s}
+    .btn-dark{background:var(--ink);color:white}.btn-dark:hover{background:#333}
+    .btn-light{background:transparent;color:var(--ink)}.btn-light:hover{background:var(--ink);color:white}
+    .navlink{font-size:.82rem;color:#555;transition:color .2s}.navlink:hover{color:#000}
+    .grid-bg{background-image:linear-gradient(rgba(0,0,0,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.035) 1px,transparent 1px);background-size:36px 36px}
+    .card{border:1px solid var(--line);background:#fff}
+    .service-card{transition:transform .25s,border-color .25s,box-shadow .25s}
+    .service-card:hover{transform:translateY(-4px);border-color:#999;box-shadow:0 18px 45px rgba(0,0,0,.06)}
+    .number{font-family:Manrope,sans-serif;font-size:3.6rem;font-weight:800;letter-spacing:-.08em;color:#d8d8d2}
+    .project-visual{min-height:230px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+    .project-visual.vet{background:linear-gradient(135deg,#d9eee8,#eff7f2)}
+    .project-visual.food{background:linear-gradient(135deg,#222,#494036)}
+    .browser{width:82%;background:white;border:1px solid rgba(0,0,0,.12);box-shadow:0 20px 50px rgba(0,0,0,.12);transform:rotate(-2deg)}
+    .browser-top{height:18px;background:#f4f4f4;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;gap:4px;padding:0 8px}
+    .dot{width:5px;height:5px;border-radius:50%;background:#c6c6c6}
+    .browser-body{padding:17px}
+    .mini-line{height:5px;background:#e7e7e7;border-radius:4px;margin:7px 0}
+    .mini-pill{display:inline-block;padding:5px 8px;background:#111;color:white;font-size:6px;letter-spacing:.08em}
+    .faq-item{border-top:1px solid var(--line)}
+    .faq-item:last-child{border-bottom:1px solid var(--line)}
+    .faq-item summary{cursor:pointer;list-style:none;padding:20px 0;font-weight:700}
+    .faq-item summary::-webkit-details-marker{display:none}
+    .faq-item summary:after{content:"+";float:right;font-size:1.25rem;font-weight:400}
+    .faq-item[open] summary:after{content:"−"}
+    input,select,textarea{width:100%;background:#fff;border:1px solid #d6d6d0;padding:13px 14px;font:inherit;font-size:.9rem;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:#111;box-shadow:0 0 0 2px rgba(0,0,0,.07)}
+    label{display:block;font-size:.73rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .65s,transform .65s}
+    .reveal.visible{opacity:1;transform:none}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}*{transition-duration:.01ms!important}}
+    @media(max-width:640px){.container{width:min(100% - 36px,1160px)}.hero-title{font-size:clamp(2.65rem,13vw,4.5rem)!important}.project-visual{min-height:190px}.btn{width:100%}}
   </style>
 </head>
 <body>
-
-<!-- ═══════════════ NAV ══════════════════════════════════ -->
-<header id="top" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-14 py-5"
-  style="background: rgba(250,250,250,.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(10,10,10,.06);">
-  <a href="#top" class="flex items-center gap-2.5">
-    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- Nodo central: representa el punto donde se automatiza / conecta -->
-      <circle cx="20" cy="20" r="3.4" fill="#0A0A0A"/>
-      <!-- Conexiones (circuito / automatización) -->
-      <line x1="20" y1="20" x2="20" y2="5"  stroke="#0A0A0A" stroke-width="1.6"/>
-      <line x1="20" y1="20" x2="32" y2="27" stroke="#0A0A0A" stroke-width="1.6"/>
-      <line x1="20" y1="20" x2="8"  y2="27" stroke="#0A0A0A" stroke-width="1.6"/>
-      <!-- Nodos exteriores: tamaño decreciente = dispersión, mismo lenguaje visual que el hero -->
-      <circle cx="20" cy="5"  r="3.6" fill="#0A0A0A"/>
-      <circle cx="32" cy="27" r="3"   fill="#0A0A0A"/>
-      <circle cx="8"  cy="27" r="3"   fill="#0A0A0A"/>
-      <circle cx="32" cy="27" r="3" fill="none"/>
-      <!-- Píxeles sueltos, mismo motivo que la decoración del hero -->
-      <rect x="27" y="8" width="3.4" height="3.4" fill="#0A0A0A" opacity=".55"/>
-      <rect x="33" y="13" width="2.2" height="2.2" fill="#0A0A0A" opacity=".3"/>
-    </svg>
-    <span class="font-display font-800 tracking-tight text-ink text-lg font-bold">Ros <span style="font-weight:300">Solutions</span></span>
-  </a>
-  <nav class="hidden md:flex items-center gap-10">
-    <a href="#servicios"  class="nav-item">Servicios</a>
-    <a href="#proceso"    class="nav-item">Proceso</a>
-    <a href="#portfolio"  class="nav-item">Portfolio</a>
-    <a href="#contacto"   class="nav-item">Contacto</a>
-  </nav>
-  <a href="#contacto" class="btn-solid text-xs py-2 px-5"><span>Presupuesto</span><span>→</span></a>
+<header class="fixed top-0 inset-x-0 z-50 bg-[#f7f7f5]/95 backdrop-blur border-b border-black/10">
+  <div class="container h-[76px] flex items-center justify-between gap-5">
+    <a href="#inicio" class="flex items-center gap-3" aria-label="Ros Solutions, inicio">
+      <span class="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-lg">R.</span>
+      <span class="font-extrabold display text-lg tracking-tight">ROS <span class="font-normal">SOLUTIONS</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8" aria-label="Navegación principal">
+      <a class="navlink" href="#servicios">Servicios</a><a class="navlink" href="#proceso">Proceso</a><a class="navlink" href="#proyectos">Proyectos</a><a class="navlink" href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-dark !py-3 !px-4 !text-[.68rem]" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
+  </div>
 </header>
 
-<!-- ═══════════════ HERO ═══════════════════════════════════ -->
-<section class="min-h-screen flex flex-col justify-center relative overflow-hidden pixel-grid pt-24 pb-16 px-8 md:px-14 lg:px-20">
-
-  <div class="absolute top-28 right-16 hidden lg:block" style="pointer-events:none;">
-    <svg width="280" height="280" viewBox="0 0 280 280" fill="none">
-      <rect x="220" y="20"  width="18" height="18" fill="#0A0A0A" opacity=".9"/>
-      <rect x="244" y="20"  width="14" height="14" fill="#0A0A0A" opacity=".6"/>
-      <rect x="220" y="44"  width="10" height="10" fill="#0A0A0A" opacity=".4"/>
-      <rect x="244" y="40"  width="8"  height="8"  fill="#0A0A0A" opacity=".25"/>
-      <rect x="258" y="32"  width="6"  height="6"  fill="#0A0A0A" opacity=".18"/>
-      <rect x="236" y="60"  width="5"  height="5"  fill="#0A0A0A" opacity=".12"/>
-      <rect x="250" y="52"  width="4"  height="4"  fill="#0A0A0A" opacity=".08"/>
-      <rect x="160" y="60"  width="6"  height="6"  fill="#0A0A0A" opacity=".06"/>
-      <rect x="172" y="54"  width="4"  height="4"  fill="#0A0A0A" opacity=".04"/>
-    </svg>
-  </div>
-
-  <div class="absolute left-8 bottom-20 hidden lg:flex flex-col items-center gap-3"
-    style="writing-mode: vertical-rl; transform: rotate(180deg);">
-    <span class="font-body text-smoke text-xs tracking-widest uppercase">Automatización</span>
-    <div style="width:1px; height:60px; background:#D4D4D4;"></div>
-    <span class="font-body text-smoke text-xs tracking-widest uppercase">Con IA</span>
-  </div>
-
-  <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-12 items-center">
-    <div class="lg:col-span-7" style="min-width:0;">
-      <div class="inline-flex items-center gap-2 mb-8">
-        <div class="pixel-block" style="width:6px; height:6px;"></div>
-        <span class="font-body text-smoke text-xs tracking-widest uppercase">Automatización con IA · Desarrollo Web</span>
-      </div>
-      <h1 class="leading-none mb-8">
-        <span class="hero-line text-ink"    style="font-size:clamp(2.6rem,5.8vw,5.2rem);">Tu negocio,</span>
-        <span class="hero-line text-ink"    style="font-size:clamp(2.6rem,5.8vw,5.2rem);">atendiendo</span>
-        <span class="hero-line"             style="font-size:clamp(2.6rem,5.8vw,5.2rem); color:transparent; -webkit-text-stroke:1.5px #0A0A0A;">clientes</span>
-        <span class="hero-line text-ink"    style="font-size:clamp(2.6rem,5.8vw,5.2rem);">las 24 horas.</span>
-      </h1>
-      <p class="font-body text-smoke leading-relaxed max-w-xl mb-10" style="font-size:1.05rem;">
-        Automatizamos la atención por WhatsApp y llamadas con IA, y desarrollamos la web que necesitas para que te encuentren. Para negocios que quieren crecer sin contratar más personal.
-      </p>
-      <div class="flex flex-wrap items-center gap-4">
-        <a href="#contacto" class="btn-solid"><span>Solicitar presupuesto</span><span>→</span></a>
-        <a href="#portfolio" class="btn-outline">Ver portfolio</a>
-      </div>
-    </div>
-
-    <div class="lg:col-span-5 lg:pl-10" style="min-width:0;">
-      <div class="grid grid-cols-1" style="border:1.5px solid #D4D4D4;">
-        <div class="p-6 sm:p-8 border-b" style="border-color:#D4D4D4;">
-          <p class="font-display font-bold text-ink text-lg mb-2">Automatización con IA</p>
-          <p class="font-body text-smoke text-sm leading-relaxed">Chatbots de WhatsApp y llamadas automatizadas que atienden a tus clientes sin que tú tengas que estar detrás.</p>
-        </div>
-        <div class="p-6 sm:p-8">
-          <p class="font-display font-bold text-ink text-lg mb-2">Desarrollo Web</p>
-          <p class="font-body text-smoke text-sm leading-relaxed">Webs rápidas y pensadas para convertir visitas en clientes, no solo para lucir bonitas.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ PROBLEMA / SOLUCIÓN ══════════════════ -->
-<section class="py-28 px-8 md:px-14 lg:px-20 pixel-grid-dark" style="background:#0A0A0A;">
-  <div class="max-w-7xl mx-auto pixel-grid-dark">
-    <div class="grid lg:grid-cols-2 gap-20 items-center">
+<main id="inicio">
+  <section class="pt-36 pb-24 md:pt-44 md:pb-32 grid-bg">
+    <div class="container grid lg:grid-cols-[1.15fr_.85fr] gap-14 items-center">
       <div class="reveal">
-        <div class="inline-flex items-center gap-2 mb-6">
-          <div style="width:6px;height:6px;background:#FAFAFA;"></div>
-          <span class="font-body text-silver text-xs tracking-widest uppercase">El problema real</span>
+        <div class="eyebrow flex items-center gap-3 mb-7"><span class="w-2 h-2 bg-black inline-block"></span> Desarrollo web · Automatización</div>
+        <h1 class="hero-title display font-extrabold text-[clamp(3.4rem,7vw,6.6rem)] leading-[.98] mb-8">Tu negocio<br>merece <span class="text-transparent" style="-webkit-text-stroke:1.5px #111">trabajar</span><br>mejor.</h1>
+        <p class="text-lg md:text-xl leading-relaxed muted max-w-xl mb-9">Creamos páginas web profesionales y automatizamos tareas para que tu negocio ahorre tiempo, mejore su presencia digital y pueda centrarse en lo importante.</p>
+        <div class="flex flex-col sm:flex-row gap-3 max-w-lg">
+          <a class="btn btn-dark" href="#contacto">Cuéntanos tu proyecto <span>→</span></a>
+          <a class="btn btn-light" href="#proyectos">Ver proyectos</a>
         </div>
-        <h2 class="font-display font-bold text-snow leading-tight mb-6" style="font-size:clamp(2rem,4.5vw,3.4rem);">
-          Cada llamada que no coges<br/>es un cliente que se va<br/><em style="font-style:normal;color:#A8A8A8;">a la competencia.</em>
-        </h2>
-        <p class="font-body text-silver leading-relaxed" style="font-size:1rem;">
-          Cada mensaje de WhatsApp sin responder, cada llamada perdida fuera de horario, cada cliente que no te encuentra online — es dinero perdido. Lo peor: ya sabes que existe solución, pero no sabes por dónde empezar.
-        </p>
+        <p class="mt-7 text-xs muted">Soluciones digitales prácticas para pequeños negocios y profesionales.</p>
       </div>
-      <div class="reveal grid gap-4">
-        <div style="border:1px solid rgba(255,255,255,.1); padding:2rem; background:rgba(255,255,255,.03);">
-          <div class="flex items-center gap-3 mb-3">
-            <div style="width:8px;height:8px;background:#FAFAFA;flex-shrink:0;"></div>
-            <p class="font-display font-bold text-snow text-lg">Atención 24/7 sin contratar a nadie</p>
+      <div class="reveal">
+        <div class="bg-[#111] text-white p-7 md:p-9 relative overflow-hidden">
+          <div class="absolute -right-12 -top-12 w-48 h-48 border border-white/15 rounded-full"></div>
+          <div class="absolute -right-2 top-0 w-28 h-28 border border-white/15 rounded-full"></div>
+          <p class="eyebrow text-white/50 mb-10">De tareas manuales a procesos simples</p>
+          <div class="space-y-3 relative">
+            <div class="border border-white/20 p-4 flex items-center gap-4">
+              <span class="w-9 h-9 bg-white/10 flex items-center justify-center">01</span>
+              <div><p class="font-bold">Tu cliente contacta</p><p class="text-xs text-white/50">Web · Formulario · Solicitud</p></div>
+            </div>
+            <div class="h-6 border-l border-dashed border-white/40 ml-8"></div>
+            <div class="border border-white/20 p-4 flex items-center gap-4">
+              <span class="w-9 h-9 bg-[#d8ff65] text-black flex items-center justify-center">02</span>
+              <div><p class="font-bold">El sistema organiza</p><p class="text-xs text-white/50">n8n · Datos · Notificaciones</p></div>
+            </div>
+            <div class="h-6 border-l border-dashed border-white/40 ml-8"></div>
+            <div class="border border-white/20 p-4 flex items-center gap-4">
+              <span class="w-9 h-9 bg-white text-black flex items-center justify-center">03</span>
+              <div><p class="font-bold">Tú ganas tiempo</p><p class="text-xs text-white/50">Menos tareas repetitivas</p></div>
+            </div>
           </div>
-          <p class="font-body text-silver text-sm leading-relaxed">Bots de WhatsApp y llamadas automatizadas que responden dudas, gestionan citas y cualifican clientes en cualquier momento.</p>
-        </div>
-        <div style="border:1px solid rgba(255,255,255,.1); padding:2rem; background:rgba(255,255,255,.03);">
-          <div class="flex items-center gap-3 mb-3">
-            <div style="width:8px;height:8px;background:#FAFAFA;flex-shrink:0;"></div>
-            <p class="font-display font-bold text-snow text-lg">Web que trabaja por ti</p>
-          </div>
-          <p class="font-body text-silver text-sm leading-relaxed">Diseñamos y desarrollamos páginas optimizadas para convertir visitantes en clientes, no solo para lucir bonitas.</p>
-        </div>
-        <div style="border:1px solid rgba(255,255,255,.1); padding:2rem; background:rgba(255,255,255,.03);">
-          <div class="flex items-center gap-3 mb-3">
-            <div style="width:8px;height:8px;background:#FAFAFA;flex-shrink:0;"></div>
-            <p class="font-display font-bold text-snow text-lg">Resultados medibles</p>
-          </div>
-          <p class="font-body text-silver text-sm leading-relaxed">Nada de promesas vacías. Acompañamiento post-lanzamiento y ajustes incluidos mientras el sistema se adapta a tu negocio.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ SERVICIOS ═══════════════════════════ -->
-<section id="servicios" class="py-28 px-8 md:px-14 lg:px-20 pixel-grid">
-  <div class="max-w-7xl mx-auto">
-    <div class="reveal mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-      <div>
-        <div class="inline-flex items-center gap-2 mb-5">
-          <div class="pixel-block" style="width:6px;height:6px;"></div>
-          <span class="font-body text-smoke text-xs tracking-widest uppercase">Lo que hacemos</span>
-        </div>
-        <h2 class="font-display font-bold text-ink leading-tight" style="font-size:clamp(2.2rem,5vw,4rem);">
-          Dos especialidades.<br/>Un objetivo: <em style="font-style:italic;">tu crecimiento.</em>
-        </h2>
-      </div>
-      <a href="#contacto" class="btn-outline self-start md:self-end">Hablemos →</a>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-6">
-      <!-- Automatización Card (ahora protagonista) -->
-      <div class="service-card reveal" style="background:#0A0A0A; border-color:#3A3A3A;">
-        <div class="absolute top-6 right-6 flex gap-1">
-          <div style="width:8px;height:8px;background:#FAFAFA;opacity:.3;"></div>
-          <div style="width:6px;height:6px;background:#FAFAFA;opacity:.2;margin-top:2px;"></div>
-          <div style="width:4px;height:4px;background:#FAFAFA;opacity:.1;margin-top:4px;"></div>
-        </div>
-        <div class="mb-6">
-          <span class="font-body text-silver text-xs tracking-widest uppercase">Servicio 01</span>
-        </div>
-        <h3 class="font-display font-bold text-snow mb-4" style="font-size:2rem;">Automatización con IA</h3>
-        <p class="font-body text-silver leading-relaxed mb-8">
-          Chatbots de WhatsApp y sistemas de llamadas automatizadas que atienden, cualifican y agendan por ti. Menos horas perdidas en tareas repetitivas, más tiempo para lo que importa.
-        </p>
-        <ul class="space-y-3">
-          <li class="flex items-center gap-3">
-            <div style="width:5px;height:5px;background:#FAFAFA;flex-shrink:0;"></div>
-            <span class="font-body text-mist text-sm">Chatbots de WhatsApp Business</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <div style="width:5px;height:5px;background:#FAFAFA;flex-shrink:0;"></div>
-            <span class="font-body text-mist text-sm">Llamadas automatizadas con IA</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <div style="width:5px;height:5px;background:#FAFAFA;flex-shrink:0;"></div>
-            <span class="font-body text-mist text-sm">Gestión automática de citas y reservas</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <div style="width:5px;height:5px;background:#FAFAFA;flex-shrink:0;"></div>
-            <span class="font-body text-mist text-sm">Integración con tu CRM o herramientas</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Web Card -->
-      <div class="service-card reveal" style="transition-delay:.1s;">
-        <div class="absolute top-6 right-6 flex gap-1">
-          <div class="pixel-block" style="width:8px;height:8px;opacity:.3;"></div>
-          <div class="pixel-block" style="width:6px;height:6px;opacity:.2;margin-top:2px;"></div>
-          <div class="pixel-block" style="width:4px;height:4px;opacity:.1;margin-top:4px;"></div>
-        </div>
-        <div class="mb-6">
-          <span class="font-body text-smoke text-xs tracking-widest uppercase">Servicio 02</span>
-        </div>
-        <h3 class="font-display font-bold text-ink mb-4" style="font-size:2rem;">Desarrollo Web</h3>
-        <p class="font-body text-smoke leading-relaxed mb-8">
-          Webs que combinan diseño de alto impacto con ingeniería sólida. Rápidas, optimizadas para SEO y diseñadas para convertir. Desde landing pages hasta plataformas e-commerce completas.
-        </p>
-        <ul class="space-y-3">
-          <li class="flex items-center gap-3">
-            <div class="pixel-block" style="width:5px;height:5px;flex-shrink:0;"></div>
-            <span class="font-body text-ink text-sm">Landing pages de alta conversión</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <div class="pixel-block" style="width:5px;height:5px;flex-shrink:0;"></div>
-            <span class="font-body text-ink text-sm">Tiendas online</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <div class="pixel-block" style="width:5px;height:5px;flex-shrink:0;"></div>
-            <span class="font-body text-ink text-sm">Webs corporativas y portfolios</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <div class="pixel-block" style="width:5px;height:5px;flex-shrink:0;"></div>
-            <span class="font-body text-ink text-sm">Optimización SEO técnico</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ PROCESO ════════════════════════════ -->
-<section id="proceso" class="py-28 px-8 md:px-14 lg:px-20" style="background:#F0F0F0;">
-  <div class="max-w-7xl mx-auto">
-    <div class="reveal mb-20">
-      <div class="inline-flex items-center gap-2 mb-5">
-        <div class="pixel-block" style="width:6px;height:6px;"></div>
-        <span class="font-body text-smoke text-xs tracking-widest uppercase">Cómo trabajamos</span>
-      </div>
-      <h2 class="font-display font-bold text-ink leading-tight" style="font-size:clamp(2.2rem,5vw,4rem);">
-        Proceso claro.<br/>Sin sorpresas.
-      </h2>
-    </div>
-    <div class="grid md:grid-cols-4 gap-0 border border-mist">
-      <div class="reveal p-6 sm:p-8 border-b md:border-b-0 md:border-r border-mist">
-        <p class="font-display font-bold text-ink text-3xl mb-4">01</p>
-        <div style="width:24px;height:2px;background:#0A0A0A;margin-bottom:1.5rem;"></div>
-        <p class="font-display font-bold text-ink text-lg mb-3">Diagnóstico</p>
-        <p class="font-body text-smoke text-sm leading-relaxed">Escuchamos tu negocio, analizamos tus necesidades y definimos el alcance exacto del proyecto.</p>
-      </div>
-      <div class="reveal p-6 sm:p-8 border-b md:border-b-0 md:border-r border-mist" style="transition-delay:.1s;">
-        <p class="font-display font-bold text-ink text-3xl mb-4">02</p>
-        <div style="width:24px;height:2px;background:#0A0A0A;margin-bottom:1.5rem;"></div>
-        <p class="font-display font-bold text-ink text-lg mb-3">Diseño</p>
-        <p class="font-body text-smoke text-sm leading-relaxed">Creamos prototipos y wireframes hasta que el resultado te convenza al 100% antes de codificar.</p>
-      </div>
-      <div class="reveal p-6 sm:p-8 border-b md:border-b-0 md:border-r border-mist" style="transition-delay:.2s;">
-        <p class="font-display font-bold text-ink text-3xl mb-4">03</p>
-        <div style="width:24px;height:2px;background:#0A0A0A;margin-bottom:1.5rem;"></div>
-        <p class="font-display font-bold text-ink text-lg mb-3">Desarrollo</p>
-        <p class="font-body text-smoke text-sm leading-relaxed">Construimos soluciones de forma rápida y eficaz.</p>
-      </div>
-      <div class="reveal p-6 sm:p-8" style="transition-delay:.3s;">
-        <p class="font-display font-bold text-ink text-3xl mb-4">04</p>
-        <div style="width:24px;height:2px;background:#0A0A0A;margin-bottom:1.5rem;"></div>
-        <p class="font-display font-bold text-ink text-lg mb-3">Lanzamiento</p>
-        <p class="font-body text-smoke text-sm leading-relaxed">Desplegamos, monitorizamos y acompañamos post-lanzamiento para garantizar los resultados.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ PORTFOLIO ══════════════════════════ -->
-<section id="portfolio" class="py-28 px-8 md:px-14 lg:px-20 pixel-grid">
-  <div class="max-w-7xl mx-auto">
-    <div class="reveal mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-      <div>
-        <div class="inline-flex items-center gap-2 mb-5">
-          <div class="pixel-block" style="width:6px;height:6px;"></div>
-          <span class="font-body text-smoke text-xs tracking-widest uppercase">Portfolio</span>
-        </div>
-        <h2 class="font-display font-bold text-ink leading-tight" style="font-size:clamp(2.2rem,5vw,4rem);">
-          Propuestas reales<br/>para negocios reales.
-        </h2>
-      </div>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-6 items-start">
-
-      <a href="https://sapsolutionsds.github.io/demo-MonBotanique/" target="_blank" rel="noopener noreferrer" class="port-card reveal block" aria-label="Ver demo de la floristería Mon Botanique">
-        <div class="p-7">
-          <div class="flex items-center justify-between mb-4">
-            <span class="port-tag text-ink" style="border-color:#0A0A0A;">Floristería</span>
-            <span class="font-body text-smoke text-xs">Propuesta real</span>
-          </div>
-          <h3 class="font-display font-bold text-ink text-xl mb-3">Mon Botanique</h3>
-          <p class="font-body text-smoke text-sm leading-relaxed mb-5">
-            Propuesta web desarrollada para una floristería, con presentación visual de ramos, servicios y vías de contacto.
-          </p>
-          <div class="font-display font-bold text-ink text-sm uppercase tracking-widest" style="border-top:1px solid #D4D4D4;padding-top:1rem;">
-            Ver demo <span aria-hidden="true">↗</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="https://sapsolutionsds.github.io/demo-CentroVeterinarioRV/" target="_blank" rel="noopener noreferrer" class="port-card reveal md:mt-12 block" style="transition-delay:.12s;" aria-label="Ver demo de Centro Veterinario RV">
-        <div class="p-7">
-          <div class="flex items-center justify-between mb-4">
-            <span class="port-tag text-ink" style="border-color:#0A0A0A;">Clínica Veterinaria</span>
-            <span class="font-body text-smoke text-xs">Propuesta real</span>
-          </div>
-          <h3 class="font-display font-bold text-ink text-xl mb-3">Centro Veterinario RV</h3>
-          <p class="font-body text-smoke text-sm leading-relaxed mb-5">
-            Propuesta web desarrollada para una clínica veterinaria, con información de servicios, equipo y solicitud de citas.
-          </p>
-          <div class="font-display font-bold text-ink text-sm uppercase tracking-widest" style="border-top:1px solid #D4D4D4;padding-top:1rem;">
-            Ver demo <span aria-hidden="true">↗</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="https://sapsolutionsds.github.io/demo-damasco/" target="_blank" rel="noopener noreferrer" class="port-card reveal block" style="transition-delay:.24s;" aria-label="Ver demo del Restaurante Damasco">
-        <div class="p-7">
-          <div class="flex items-center justify-between mb-4">
-            <span class="port-tag text-ink" style="border-color:#0A0A0A;">Restaurante</span>
-            <span class="font-body text-smoke text-xs">Propuesta real</span>
-          </div>
-          <h3 class="font-display font-bold text-ink text-xl mb-3">Restaurante Damasco</h3>
-          <p class="font-body text-smoke text-sm leading-relaxed mb-5">
-            Propuesta web desarrollada para un restaurante, con carta digital, información del negocio, reservas y ubicación.
-          </p>
-          <div class="font-display font-bold text-ink text-sm uppercase tracking-widest" style="border-top:1px solid #D4D4D4;padding-top:1rem;">
-            Ver demo <span aria-hidden="true">↗</span>
-          </div>
-        </div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ CONTACTO / CTA ════════════════════ -->
-<section id="contacto" class="py-28 px-8 md:px-14 lg:px-20" style="background:#0A0A0A;">
-  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-    <div class="reveal">
-      <div class="inline-flex items-center gap-2 mb-6">
-        <div style="width:6px;height:6px;background:#FAFAFA;"></div>
-        <span class="font-body text-silver text-xs tracking-widest uppercase">Empecemos</span>
-      </div>
-      <h2 class="font-display font-bold text-snow leading-tight mb-6" style="font-size:clamp(2.2rem,5vw,4rem);">
-        Tu próximo cliente<br/>ya está buscándote<br/><em style="font-style:italic;color:#6B6B6B;">online.</em>
-      </h2>
-      <p class="font-body text-silver leading-relaxed mb-10" style="font-size:1rem;">
-        Cuéntanos tu proyecto. En menos de 24 horas te enviamos un presupuesto claro, sin compromiso y sin letra pequeña.
-      </p>
-      <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div style="width:5px;height:5px;background:#FAFAFA;flex-shrink:0;"></div>
-          <span class="font-body text-silver text-sm">Respuesta garantizada en &lt;24h</span>
-        </div>
-        <div class="flex items-center gap-4">
-          <div style="width:5px;height:5px;background:#FAFAFA;flex-shrink:0;"></div>
-          <span class="font-body text-silver text-sm">Presupuesto sin compromiso</span>
+          <div class="mt-9 flex items-center justify-between text-xs text-white/50"><span>DISEÑO + TECNOLOGÍA</span><span>ROS / 001</span></div>
         </div>
       </div>
     </div>
-    <div class="reveal" style="transition-delay:.1s;">
-      <div style="border:1.5px solid rgba(255,255,255,.12); padding:2.5rem; background:rgba(255,255,255,.03);">
-        <form id="contact-form" action="https://formsubmit.co/ajax/rossolutionsesp@gmail.com" method="POST" class="space-y-4">
-          <input type="hidden" name="_subject" value="Nueva solicitud desde la web de Ros Solutions"/>
-          <input type="hidden" name="_template" value="table"/>
-          <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none;"/>
-          <div>
-            <label for="contact-name" class="font-body text-silver text-xs tracking-widest uppercase block mb-2">Nombre</label>
-            <input id="contact-name" type="text" name="nombre" placeholder="Tu nombre" autocomplete="name" required class="w-full font-body text-snow text-sm py-3 px-4"
-              style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);outline:none;transition:border-color .3s;"
-              onfocus="this.style.borderColor='rgba(255,255,255,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.12)'"/>
+  </section>
+
+  <section class="py-20 bg-[#111] text-white">
+    <div class="container grid md:grid-cols-2 gap-12 items-start">
+      <div class="reveal">
+        <p class="eyebrow text-white/50 mb-5">El reto de muchos negocios</p>
+        <h2 class="display text-4xl md:text-5xl font-extrabold leading-tight">La tecnología debería quitarte trabajo, no añadirlo.</h2>
+      </div>
+      <div class="reveal space-y-7">
+        <p class="text-white/65 leading-relaxed">Responder siempre a las mismas consultas, copiar datos entre herramientas o depender únicamente del teléfono consume tiempo que podrías dedicar a tus clientes.</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="border border-white/15 p-5"><p class="font-bold mb-2">Presencia digital</p><p class="text-sm text-white/55">Una web clara para explicar qué haces y facilitar el contacto.</p></div>
+          <div class="border border-white/15 p-5"><p class="font-bold mb-2">Procesos conectados</p><p class="text-sm text-white/55">Automatizaciones que reducen tareas manuales y ordenan solicitudes.</p></div>
+          <div class="border border-white/15 p-5"><p class="font-bold mb-2">Información organizada</p><p class="text-sm text-white/55">Los datos llegan al lugar adecuado y quedan disponibles para el equipo.</p></div>
+          <div class="border border-white/15 p-5"><p class="font-bold mb-2">Soluciones a medida</p><p class="text-sm text-white/55">Empezamos por lo que necesitas, sin complicar el proyecto.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios" class="py-24 md:py-32">
+    <div class="container">
+      <div class="reveal max-w-2xl mb-14"><p class="eyebrow muted mb-5">Qué podemos hacer</p><h2 class="display text-4xl md:text-6xl font-extrabold mb-5">Dos especialidades.<br>Un objetivo común.</h2><p class="muted text-lg">Elegimos las herramientas según el problema: desde una web sencilla hasta procesos conectados con tus aplicaciones.</p></div>
+      <div class="grid md:grid-cols-2 gap-5">
+        <article class="service-card card p-7 md:p-10 reveal">
+          <div class="flex justify-between items-start mb-12"><span class="eyebrow muted">01 / Desarrollo web</span><span class="text-2xl">↗</span></div>
+          <h3 class="display text-3xl font-extrabold mb-4">Una web que representa tu negocio.</h3>
+          <p class="muted leading-relaxed mb-8">Diseñamos webs rápidas, adaptadas a móviles y pensadas para que tus clientes encuentren la información y sepan cómo contactar contigo.</p>
+          <ul class="space-y-3 text-sm"><li>— Webs corporativas y páginas de servicios</li><li>— Landing pages y páginas de captación</li><li>— Cartas digitales y catálogos</li><li>— Formularios y conexión con herramientas</li><li>— Optimización técnica básica para buscadores</li></ul>
+          <a href="#contacto" class="inline-flex mt-10 font-bold text-sm border-b border-black pb-1">Quiero una web <span class="ml-3">→</span></a>
+        </article>
+        <article class="service-card bg-[#111] text-white p-7 md:p-10 reveal">
+          <div class="flex justify-between items-start mb-12"><span class="eyebrow text-white/50">02 / Automatización</span><span class="text-2xl">↗</span></div>
+          <h3 class="display text-3xl font-extrabold mb-4">Menos tareas repetitivas. Más control.</h3>
+          <p class="text-white/60 leading-relaxed mb-8">Conectamos formularios, hojas de cálculo, correo y otras aplicaciones para que la información fluya sin tener que copiarla manualmente.</p>
+          <ul class="space-y-3 text-sm text-white/85"><li>— Registro automático de solicitudes</li><li>— Avisos y notificaciones internas</li><li>— Confirmaciones y seguimiento</li><li>— Integraciones mediante APIs y webhooks</li><li>— Flujos personalizados con n8n</li></ul>
+          <a href="#contacto" class="inline-flex mt-10 font-bold text-sm border-b border-white pb-1">Quiero automatizar <span class="ml-3">→</span></a>
+        </article>
+      </div>
+      <div class="mt-5 card p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5 reveal">
+        <div><p class="font-bold text-lg mb-1">¿Necesitas ambas cosas?</p><p class="muted text-sm">Podemos conectar tu web con automatizaciones para crear un proceso completo.</p></div>
+        <a class="btn btn-dark" href="#contacto">Diseñar una solución <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="proceso" class="py-24 bg-[#ecece8]">
+    <div class="container">
+      <div class="reveal mb-14"><p class="eyebrow muted mb-5">Cómo trabajamos</p><h2 class="display text-4xl md:text-6xl font-extrabold">Claro desde el primer día.</h2></div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 border border-[#d4d4ce]">
+        <div class="p-7 border-b sm:border-r lg:border-b-0 border-[#d4d4ce] reveal"><p class="number">01</p><h3 class="font-extrabold text-xl mb-3">Te escuchamos</h3><p class="muted text-sm leading-relaxed">Entendemos tu negocio, el problema y qué resultado necesitas.</p></div>
+        <div class="p-7 border-b lg:border-b-0 lg:border-r border-[#d4d4ce] reveal"><p class="number">02</p><h3 class="font-extrabold text-xl mb-3">Proponemos</h3><p class="muted text-sm leading-relaxed">Definimos alcance, plazos, herramientas y presupuesto antes de empezar.</p></div>
+        <div class="p-7 border-b sm:border-r sm:border-b-0 lg:border-r border-[#d4d4ce] reveal"><p class="number">03</p><h3 class="font-extrabold text-xl mb-3">Desarrollamos</h3><p class="muted text-sm leading-relaxed">Construimos la solución y revisamos contigo los puntos importantes.</p></div>
+        <div class="p-7 reveal"><p class="number">04</p><h3 class="font-extrabold text-xl mb-3">Entregamos</h3><p class="muted text-sm leading-relaxed">Probamos, publicamos y explicamos cómo utilizar lo que hemos creado.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proyectos" class="py-24 md:py-32">
+    <div class="container">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 reveal">
+        <div><p class="eyebrow muted mb-5">Proyectos demostrativos</p><h2 class="display text-4xl md:text-6xl font-extrabold">Ideas convertidas<br>en experiencias web.</h2></div>
+        <p class="muted max-w-sm text-sm leading-relaxed">Ejemplos conceptuales creados para mostrar posibilidades de diseño y desarrollo. No son encargos ni resultados de clientes reales.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <article class="card overflow-hidden reveal">
+          <div class="project-visual vet">
+            <div class="browser">
+              <div class="browser-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="ml-2 text-[7px] text-gray-400">centroveterinariorv.es</span></div>
+              <div class="browser-body">
+                <div class="flex justify-between items-center"><b class="text-[9px] text-emerald-900">CENTRO VETERINARIO RV</b><span class="mini-pill">PEDIR CITA</span></div>
+                <div class="mt-5 grid grid-cols-2 gap-3 items-center"><div><div class="mini-line w-4/5" style="height:10px;background:#9bbcaf"></div><div class="mini-line w-full"></div><div class="mini-line w-3/4"></div><div class="mini-pill mt-2">CONÓCENOS</div></div><div class="h-20 bg-[#c4ddd0] rounded-sm flex items-center justify-center text-2xl">✚</div></div>
+              </div>
+            </div>
           </div>
-          <div>
-            <label for="contact-email" class="font-body text-silver text-xs tracking-widest uppercase block mb-2">Email</label>
-            <input id="contact-email" type="email" name="email" placeholder="tu@empresa.com" autocomplete="email" required class="w-full font-body text-snow text-sm py-3 px-4"
-              style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);outline:none;transition:border-color .3s;"
-              onfocus="this.style.borderColor='rgba(255,255,255,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.12)'"/>
+          <div class="p-7"><div class="flex justify-between gap-3 items-center mb-4"><span class="eyebrow muted">Clínica veterinaria</span><span class="text-[.65rem] font-bold bg-[#f0f0ec] px-2 py-1">DEMO</span></div><h3 class="display text-2xl font-extrabold mb-3">Centro Veterinario RV</h3><p class="muted text-sm leading-relaxed mb-6">Concepto de web para una clínica: servicios, presentación del equipo, horarios y solicitud de citas.</p><a class="font-bold text-sm border-b border-black pb-1" href="https://sapsolutionsds.github.io/demo-CentroVeterinarioRV/" target="_blank" rel="noopener noreferrer">Ver demostración ↗</a></div>
+        </article>
+        <article class="card overflow-hidden reveal">
+          <div class="project-visual food">
+            <div class="browser">
+              <div class="browser-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="ml-2 text-[7px] text-gray-400">restaurantedamasco.es</span></div>
+              <div class="browser-body" style="background:#29251f;color:#f8f1e7">
+                <div class="flex justify-between items-center"><b class="text-[9px] tracking-widest">DAMASCO</b><span class="text-[7px]">CARTA · RESERVAS</span></div>
+                <div class="mt-5 text-center py-4"><div class="text-[17px] font-bold" style="font-family:Georgia,serif">Sabores que<br>reúnen.</div><div class="mini-line w-1/2 mx-auto mt-3" style="background:#786b5b"></div><span class="inline-block mt-3 border border-white/40 px-3 py-1 text-[6px] tracking-widest">DESCUBRE LA CARTA</span></div>
+              </div>
+            </div>
           </div>
-          <div>
-            <label for="contact-service" class="font-body text-silver text-xs tracking-widest uppercase block mb-2">Servicio</label>
-            <select id="contact-service" name="servicio" required class="w-full font-body text-silver text-sm py-3 px-4 cursor-pointer"
-              style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);outline:none;color:#A8A8A8;">
-              <option value="" style="background:#0A0A0A;">Selecciona un servicio</option>
-              <option value="Automatización con IA" style="background:#0A0A0A;">Automatización con IA</option>
-              <option value="Desarrollo Web" style="background:#0A0A0A;">Desarrollo Web</option>
-              <option value="Ambos servicios" style="background:#0A0A0A;">Ambos servicios</option>
-            </select>
-          </div>
-          <div>
-            <label for="contact-message" class="font-body text-silver text-xs tracking-widest uppercase block mb-2">Mensaje</label>
-            <textarea id="contact-message" name="mensaje" rows="4" placeholder="Cuéntanos sobre tu negocio y lo que necesitas..." required class="w-full font-body text-snow text-sm py-3 px-4 resize-none"
-              style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);outline:none;transition:border-color .3s;"
-              onfocus="this.style.borderColor='rgba(255,255,255,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.12)'"></textarea>
-          </div>
-          <button id="contact-submit" type="submit" class="w-full btn-solid justify-center py-4" style="background:#FAFAFA;color:#0A0A0A;border-color:#FAFAFA;font-size:.8rem;">
-            <span>Enviar mensaje</span><span>→</span>
-          </button>
-          <p id="contact-status" class="font-body text-sm text-silver" role="status" aria-live="polite"></p>
+          <div class="p-7"><div class="flex justify-between gap-3 items-center mb-4"><span class="eyebrow muted">Restauración</span><span class="text-[.65rem] font-bold bg-[#f0f0ec] px-2 py-1">DEMO</span></div><h3 class="display text-2xl font-extrabold mb-3">Restaurante Damasco</h3><p class="muted text-sm leading-relaxed mb-6">Concepto de web para restaurante con carta digital, información del local, reservas y ubicación.</p><a class="font-bold text-sm border-b border-black pb-1" href="https://sapsolutionsds.github.io/demo-damasco/" target="_blank" rel="noopener noreferrer">Ver demostración ↗</a></div>
+        </article>
+      </div>
+      <p class="text-xs muted mt-5">Las marcas, textos y elementos de estas demostraciones son ilustrativos. Los proyectos no representan clientes contratantes.</p>
+    </div>
+  </section>
+
+  <section class="py-24 bg-[#d8ff65]">
+    <div class="container flex flex-col md:flex-row items-start md:items-center justify-between gap-8 reveal">
+      <div><p class="eyebrow mb-4">No hace falta complicarlo</p><h2 class="display text-4xl md:text-5xl font-extrabold max-w-2xl">Empecemos por el proceso que más tiempo te quita.</h2></div>
+      <a class="btn btn-dark shrink-0" href="#contacto">Cuéntanoslo <span>→</span></a>
+    </div>
+  </section>
+
+  <section id="faq" class="py-24">
+    <div class="container grid lg:grid-cols-[.8fr_1.2fr] gap-14">
+      <div class="reveal"><p class="eyebrow muted mb-5">Preguntas frecuentes</p><h2 class="display text-4xl md:text-5xl font-extrabold mb-5">Antes de empezar.</h2><p class="muted leading-relaxed">Si tienes otra pregunta, cuéntanosla en el formulario y la revisamos contigo.</p></div>
+      <div class="reveal">
+        <details class="faq-item"><summary>¿Trabajáis con cualquier tipo de negocio?</summary><p class="muted text-sm leading-relaxed pb-6">Trabajamos con pequeños negocios y profesionales de distintos sectores. Primero analizamos la necesidad para comprobar si podemos aportar una solución adecuada.</p></details>
+        <details class="faq-item"><summary>¿Cuánto cuesta una página web o una automatización?</summary><p class="muted text-sm leading-relaxed pb-6">Depende del alcance, las funcionalidades y los servicios externos necesarios. Después de conocer tu caso, preparamos una propuesta con alcance y presupuesto definidos.</p></details>
+        <details class="faq-item"><summary>¿Tengo que pagar herramientas o alojamiento?</summary><p class="muted text-sm leading-relaxed pb-6">Puede haber costes de dominio, alojamiento o plataformas de terceros. Los identificaremos y explicaremos antes de iniciar el proyecto; no se incluyen por defecto en el desarrollo.</p></details>
+        <details class="faq-item"><summary>¿Puedo contratar solo una parte del servicio?</summary><p class="muted text-sm leading-relaxed pb-6">Sí. Puedes contratar únicamente una web, una automatización o una integración concreta. No es necesario contratar un paquete completo.</p></details>
+        <details class="faq-item"><summary>¿Ofrecéis mantenimiento después de publicar?</summary><p class="muted text-sm leading-relaxed pb-6">Podemos acordar soporte y mantenimiento según las necesidades del proyecto. El alcance, las tareas incluidas y el precio se detallan por separado.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="py-24 md:py-32 bg-[#111] text-white">
+    <div class="container grid lg:grid-cols-2 gap-14 items-start">
+      <div class="reveal">
+        <p class="eyebrow text-white/50 mb-5">Hablemos de tu proyecto</p>
+        <h2 class="display text-4xl md:text-6xl font-extrabold leading-tight mb-7">Cuéntanos qué necesitas. <span class="text-white/40">Buscaremos la forma de hacerlo sencillo.</span></h2>
+        <p class="text-white/60 leading-relaxed max-w-lg mb-10">Explícanos brevemente qué hace tu negocio y qué te gustaría mejorar. Revisaremos tu solicitud para valorar el siguiente paso.</p>
+        <div class="space-y-4 text-sm text-white/75"><p>— Primera valoración sin compromiso</p><p>— Alcance y presupuesto claros</p><p>— Soluciones adaptadas a tu negocio</p></div>
+        <a class="inline-flex mt-10 text-sm border-b border-white/50 pb-2" href="mailto:rossolutionsesp@gmail.com">rossolutionsesp@gmail.com ↗</a>
+      </div>
+      <div class="reveal bg-white text-black p-6 md:p-9">
+        <form id="contact-form" action="https://formsubmit.co/ajax/rossolutionsesp@gmail.com" method="POST" class="space-y-5">
+          <input type="hidden" name="_subject" value="Nueva solicitud desde Ros Solutions">
+          <input type="hidden" name="_template" value="table">
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="!hidden" aria-hidden="true">
+          <div><label for="name">Nombre</label><input id="name" name="nombre" autocomplete="name" placeholder="Tu nombre" required></div>
+          <div><label for="email">Correo electrónico</label><input id="email" type="email" name="email" autocomplete="email" placeholder="tu@empresa.com" required></div>
+          <div><label for="business">Nombre del negocio (opcional)</label><input id="business" name="negocio" autocomplete="organization" placeholder="Nombre de tu negocio"></div>
+          <div><label for="service">¿En qué podemos ayudarte?</label><select id="service" name="servicio" required><option value="">Selecciona una opción</option><option>Desarrollo web</option><option>Automatización con n8n</option><option>Web + automatización</option><option>Integración o mejora de un sistema</option><option>No lo tengo claro todavía</option></select></div>
+          <div><label for="message">Cuéntanos un poco más</label><textarea id="message" name="mensaje" rows="4" placeholder="¿Qué necesitas mejorar o qué tarea te gustaría automatizar?" required></textarea></div>
+          <label class="flex items-start gap-3 normal-case tracking-normal font-normal text-xs leading-relaxed"><input type="checkbox" name="consentimiento" required class="!w-4 !h-4 mt-0.5 shrink-0"><span>He leído la información básica sobre el tratamiento de mis datos y acepto que se utilicen para responder a esta solicitud. <span class="text-gray-500">(Responsable: Ros Solutions. Finalidad: gestionar y responder la consulta. Puedes ejercer tus derechos escribiendo al correo de contacto.)</span></span></label>
+          <button id="contact-submit" class="btn btn-dark w-full" type="submit">Enviar solicitud <span>→</span></button>
+          <p id="contact-status" class="text-sm text-gray-600" role="status" aria-live="polite"></p>
+          <p class="text-[.68rem] text-gray-500 leading-relaxed">No utilizaremos este formulario para enviarte publicidad no solicitada. Para una política de privacidad completa, sustituye esta información básica por el texto legal adaptado a la identidad y actividad del responsable antes de publicar.</p>
         </form>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 
-<!-- ═══════════════ FOOTER ════════════════════════════ -->
-<footer class="py-14 px-8 md:px-14 lg:px-20 border-t" style="background:#0A0A0A;border-color:rgba(255,255,255,.08);">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-    <div class="flex items-center gap-2.5">
-      <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="20" cy="20" r="3.4" fill="#FAFAFA"/>
-        <line x1="20" y1="20" x2="20" y2="5"  stroke="#FAFAFA" stroke-width="1.6"/>
-        <line x1="20" y1="20" x2="32" y2="27" stroke="#FAFAFA" stroke-width="1.6"/>
-        <line x1="20" y1="20" x2="8"  y2="27" stroke="#FAFAFA" stroke-width="1.6"/>
-        <circle cx="20" cy="5"  r="3.6" fill="#FAFAFA"/>
-        <circle cx="32" cy="27" r="3"   fill="#FAFAFA"/>
-        <circle cx="8"  cy="27" r="3"   fill="#FAFAFA"/>
-        <rect x="27" y="8" width="3.4" height="3.4" fill="#FAFAFA" opacity=".55"/>
-        <rect x="33" y="13" width="2.2" height="2.2" fill="#FAFAFA" opacity=".3"/>
-      </svg>
-      <div>
-        <p class="font-display font-bold text-snow text-xl tracking-tight">Ros <span style="font-weight:300">Solutions</span></p>
-        <p class="font-body text-silver text-xs mt-1 tracking-widest uppercase">Automatización con IA · Desarrollo Web</p>
-      </div>
-    </div>
-    <nav class="flex flex-wrap gap-8">
-      <a href="#servicios" class="font-body text-silver text-sm hover:text-snow transition-colors">Servicios</a>
-      <a href="#proceso"   class="font-body text-silver text-sm hover:text-snow transition-colors">Proceso</a>
-      <a href="#portfolio" class="font-body text-silver text-sm hover:text-snow transition-colors">Portfolio</a>
-      <a href="#contacto"  class="font-body text-silver text-sm hover:text-snow transition-colors">Contacto</a>
-    </nav>
-    <a href="#contacto" class="btn-solid" style="background:#FAFAFA;color:#0A0A0A;border-color:#FAFAFA;font-size:.72rem;">
-      <span>Solicitar presupuesto</span><span>→</span>
-    </a>
-  </div>
-  <div style="border-top:1px solid rgba(255,255,255,.06);margin-top:2.5rem;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-    <p class="font-body text-mid text-xs">© 2026 Ros Solutions. Todos los derechos reservados.</p>
-    <div class="flex items-center gap-2">
-      <div style="width:5px;height:5px;background:#6B6B6B;"></div>
-      <div style="width:4px;height:4px;background:#3A3A3A;"></div>
-      <div style="width:3px;height:3px;background:#1E1E1E;"></div>
-    </div>
+<footer class="bg-[#111] text-white border-t border-white/10 py-9">
+  <div class="container flex flex-col md:flex-row justify-between gap-7 items-start md:items-center">
+    <div><p class="display font-extrabold text-xl">ROS <span class="font-normal">SOLUTIONS</span></p><p class="text-white/45 text-xs mt-2">Desarrollo web · Automatización de procesos</p></div>
+    <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/60"><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#contacto">Contacto</a><a href="mailto:rossolutionsesp@gmail.com">Email</a></nav>
+    <p class="text-white/35 text-xs">© <span id="year"></span> Ros Solutions.</p>
   </div>
 </footer>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const lines = document.querySelectorAll('.hero-line');
-    lines.forEach((l, i) => setTimeout(() => l.classList.add('visible'), 200 + i * 130));
-  });
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: .1 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  document.querySelectorAll('.service-card').forEach(card => {
-    const line = card.querySelector('[data-hover-line]');
-    if (line) {
-      card.addEventListener('mouseenter', () => line.style.transform = 'scaleX(1)');
-      card.addEventListener('mouseleave', () => line.style.transform = 'scaleX(0)');
-    }
-  });
+  const form = document.getElementById('contact-form');
+  const submit = document.getElementById('contact-submit');
+  const status = document.getElementById('contact-status');
 
-  const contactForm = document.getElementById('contact-form');
-  const contactSubmit = document.getElementById('contact-submit');
-  const contactStatus = document.getElementById('contact-status');
-
-  contactForm.addEventListener('submit', async event => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    contactSubmit.disabled = true;
-    contactStatus.textContent = 'Enviando mensaje…';
-
+    if (!form.reportValidity()) return;
+    submit.disabled = true;
+    submit.style.opacity = '.6';
+    status.textContent = 'Enviando tu solicitud…';
     try {
-      const response = await fetch(contactForm.action, {
+      const response = await fetch(form.action, {
         method: 'POST',
-        body: new FormData(contactForm),
-        headers: { Accept: 'application/json' }
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
       });
-
-      if (!response.ok) throw new Error('No se pudo enviar el formulario');
-      window.location.reload();
+      if (!response.ok) throw new Error('No se pudo enviar el formulario.');
+      status.textContent = '¡Gracias! Tu solicitud se ha enviado correctamente.';
+      form.reset();
     } catch (error) {
-      contactStatus.textContent = 'No se pudo enviar el mensaje. Inténtalo de nuevo.';
-      contactSubmit.disabled = false;
+      status.textContent = 'No se ha podido enviar. Puedes escribirnos a rossolutionsesp@gmail.com.';
+    } finally {
+      submit.disabled = false;
+      submit.style.opacity = '1';
     }
   });
 </script>
